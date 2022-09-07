@@ -1,7 +1,8 @@
 
 
 def main():
-    print("hello world")
+    print("tutorial on github")
+
 
 
 
