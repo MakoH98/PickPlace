@@ -9,8 +9,10 @@ def main():
     _socket = buildsocket(HOST, PORT)   #Builidng socket wire shark
 
 
+    time.sleep(1)
+    _socket.send(("set_digital_out(0,True)"+"\n").encode('utf8'))
     time.sleep(2)
-    _socket.send(("Set_digital_out(0,True)"+"\n").encode('utf8'))
+    _socket.send(("set_digital_out(0,False)" + "\n").encode('utf8'))
 
 def buildsocket(ip, port):
 
