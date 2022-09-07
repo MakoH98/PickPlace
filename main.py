@@ -1,8 +1,8 @@
 import socket
 import time
 
-HOST = "192.168....."  # host adress
-PORT = "30002"         #host port
+HOST = "192.168.0.15"  # host adress
+PORT = 30002         #host port
 
 
 def main():
