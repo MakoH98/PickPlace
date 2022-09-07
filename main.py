@@ -6,7 +6,8 @@ PORT = 30002         #host port
 
 
 def main():
-    _socket = buildsocket(HOST, PORT)   #Builidng socket
+    _socket = buildsocket(HOST, PORT)   #Builidng socket wire shark
+
 
     time.sleep(2)
     _socket.send(("Set_digital_out(0,True)"+"\n").encode('utf8'))
