@@ -1,7 +1,9 @@
+import socket
+import time
 
 
 def main():
-    print("tutorial on github")
+    print("tutorial voor het besturen van git")
 
 
 
