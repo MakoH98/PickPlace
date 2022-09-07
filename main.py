@@ -6,12 +6,12 @@ PORT = "30002"         #host port
 
 
 def main():
-    buildsocket(HOST, PORT)
+    buildsocket(HOST, PORT)   #Builidng socket
 
 
 def buildsocket(ip, port):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((ip, port))
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   #setting up socket
+    s.connect((ip, port))   #conecting network socket
 
 
 
