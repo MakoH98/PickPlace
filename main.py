@@ -6,7 +6,7 @@ PORT = 30002         #host port
 
 
 def main():
-    _socket = buildsocket(HOST, PORT)   #Builidng socket wire shark
+    _socket = buildsocket(HOST, PORT)   #Builidng socket
 
 
     time.sleep(1)
@@ -16,9 +16,9 @@ def main():
 
 def buildsocket(ip, port):
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   #setting up socket in stream mode
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   #setting up socket in stream mode for Robot
     s.connect((ip, port))   #conecting network socket
-    return s
+    return s #returning network socket
 
 
 if __name__ == '__main__':
