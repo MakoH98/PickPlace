@@ -5,7 +5,6 @@ import time
 HOST = "192.168.0.15"  # robot adress NB IP ADRESS FOR CLIENT NEEDS TO BE 192.168.0.XX
 PORT = 30002         #robot port for UR comms
 
-# x, y, z, rx, ry , rz = 200, 300 , 500 ,0 ,0 ,3.14
 
 def main():
     _socket = buildsocket(HOST, PORT)   #Builidng socket
