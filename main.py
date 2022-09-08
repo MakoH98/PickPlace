@@ -1,8 +1,8 @@
-import socket
+from Backend import buildsocket
 import time
 
-HOST = "192.168.0.15"  # host adress
-PORT = 30002         #host port
+HOST = "192.168.0.15"  # robot adress
+PORT = 30002         #robot port for UR comms
 
 
 def main():
@@ -14,11 +14,7 @@ def main():
     time.sleep(2)
     _socket.send(("set_digital_out(0,False)" + "\n").encode('utf8'))
 
-def buildsocket(ip, port):
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   #setting up socket in stream mode for Robot
-    s.connect((ip, port))   #conecting network socket
-    return s #returning network socket
 
 
 if __name__ == '__main__':
