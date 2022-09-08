@@ -16,11 +16,20 @@ def main():
     # time.sleep(2)
     # _socket.send(("set_digital_out(0,False)" + "\n").encode('utf8'))
     while True:
-        pose1 = "p[0.185,0.678,0.3,3.14,0,0]" # x,y,z,rx,ry,rz
-        pose2 = "p[0.185,0.400,0.9,1.58,0,0]"  # x,y,z,rx,ry,rz
-        _socket.send((f"movel({pose1}, a=2, v=1.3, t=3, r=0)" + "\n").encode('utf8'))
-        time.sleep(5)
-        _socket.send((f"movel({pose2}, a=2, v=1.3, t=3, r=0)" + "\n").encode('utf8'))
-        time.sleep(5)
+        poses = [
+        "p[0.8,0.4,0.1,     3.14,0,0]", # x,y,z,rx,ry,rz
+        "p[0.8,0.4,0.8,     3.14,0,0]",  # x,y,z,rx,ry,rz
+        "p[0,1,0.8,     3.14,0,0]",  # x,y,z,rx,ry,rz
+        "p[0,1,0.1,     3.14,0,0]",  # x,y,z,rx,ry,rz
+        "p[0,1,0.8,     3.14,0,0]",  # x,y,z,rx,ry,rz
+        "p[0.8,0.4,0.8,     3.14,0,0]"  # x,y,z,rx,ry,rz
+        ]
+        for pose in poses:
+
+            _socket.send((f"movel({pose}, a=0.5, v=1.3, t=0, r=0)" + "\n").encode('utf8'))
+
+            time.sleep(3)
+
+
 if __name__ == '__main__':
     main()
