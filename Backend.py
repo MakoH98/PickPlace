@@ -8,17 +8,10 @@ def Hostsocket(ip, port):
     s.connect((ip, port))   #conecting network socket
     return s #returning network socket
 
-def Clientsocket(ip, port):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind(ip, port)
-    s.listen(5)
-    c, addr = s.accept()
-    msg = c.recv(1024)
-    return msg
 
 
-JointAngles = {  #dictionary with robot positions based on joint angles
+
+JointAngles = {  #dictionary with robot positions based on joint angles in degrees
     'safe_start': [-90, -90, 90,  -90, -90, 0]
 
 }
@@ -30,6 +23,23 @@ MoveParameters = {
     'blend_20': 0.02
 }
 
-TCPPoses = {
+TCPPoses = {  #dict containing poses mm degrees x, y , z , rx ,ry ,rz
+    'pose_test': [0, 400, 400, 180, 0, 0]
+
 
 }
+
+class userprompt:
+
+    def __init__(self):
+        print('init')
+
+
+    def main(self):
+        key = input('1: Free drive mode? 2: Move to safe start angles 3: ')
+        if key == 1:
+            return 'FreeDrive'
+
+    def connectFail(self):
+        if input('connection failed retry y/n') == 'y':
+            return True

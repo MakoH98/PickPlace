@@ -1,5 +1,4 @@
-from Backend import Hostsocket, JointAngles
-import socket
+from Backend import Hostsocket, JointAngles, userprompt
 import time
 import rtde_control, rtde_io, rtde_receive
 
@@ -7,29 +6,41 @@ URIP = "192.168.0.15"  # robot adress NB IP ADRESS FOR CLIENT NEEDS TO BE 192.16
 URPORT = 30002         #robot port for UR comms
 PCIP = "192.168.0.14" #pc adress
 PCPORT = 30000          #listing on port
+rtde_c= None
+rtde_i =None
+rtde_r = None
 
 def main():
-    s = True
-    while s == True:
-        try:
-            rtde_c, rtde_r, rtde_i = setup(URIP)
-            print(f'Connection Estabalished current joint postition = {rtde_c.getActualJointPositionsHistory()}')
-            if input("Go to safe joint pos? y/n") == 'y':
-                rtde_c.moveJ(JointAngles['safe_start'])
-                print('moving to safe start angles')
+    c = False
+    rtde_c = None
+    rtde_i = None
+    rtde_r = None
+    menu = userprompt()
+    while not c :
+        try:            #attempting to connect to robot
+            rtde_c, rtde_r, rtde_i = setup(URIP) #calling setup function for control recieve and IO conections
+            print(f'Connection Estabalished current joint postition = {rtde_c.getActualJointPositionsHistory()}') #test to see if actual joint position of robot on powerup is passed back might change to actual tcp
+            c = True
         except:
-            print('connecting failed')
-            if input('retry = y/n') == 'n':
-                s = False
+            if not menu.connectFail():
+                break
+    while c:
+        if menu.main() == 'FreeDrive':
+            rtde_c.freedriveMode([1,1,1,1,1,1])
+
 
     print('end of program') #keep at the end
 
-def setup(HOST):
+
+def setup(HOST): #setting up all the conections
     c = rtde_control.RTDEControlInterface(HOST)
     r = rtde_receive.RTDEReceiveInterface(HOST)
     i = rtde_io.RTDEIOInterface(HOST)
 
     return c, r, i
+
+
+
 
 
 def pc_host(HOST, PORT): #old code making sockets
@@ -60,34 +71,6 @@ def pc_host(HOST, PORT): #old code making sockets
         data = _socket.recv(1024)
         _socket.close()
         print(f"Data from robot recieved...:{repr(data)}")      ##
-
-
-
-def UR_host(HOST, PORT):
-    count = 0
-    while count < 1000:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind((HOST, PORT))
-        s.listen(5)
-        c, addr = s.accept()
-
-        try:
-            msg = c.recv(1024)
-            print(msg)
-
-            if msg == "Ask_Data":
-                count = count + 1
-                print("trying to send data..")
-                time.sleep(0.5)
-                command = "(0.2,0.05,45)"
-                c.send(command)
-
-        except socket.error as socketerror:
-            print(count)
-
-    c.close()
-    s.close()
 
 
 if __name__ == '__main__':
