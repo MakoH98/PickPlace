@@ -1,18 +1,38 @@
-from Backend import Hostsocket
+from Backend import Hostsocket, JointAngles
 import socket
 import time
-
+import rtde_control, rtde_io, rtde_receive
 
 URIP = "192.168.0.15"  # robot adress NB IP ADRESS FOR CLIENT NEEDS TO BE 192.168.0.XX
 URPORT = 30002         #robot port for UR comms
-PCIP = "192.168.0.14"
-PCPORT = 30000
+PCIP = "192.168.0.14" #pc adress
+PCPORT = 30000          #listing on port
 
 def main():
-    # pc_host(URIP, URPORT) sends commands via socket
-    UR_host(PCIP, PCPORT)
+    s = True
+    while s == True:
+        try:
+            rtde_c, rtde_r, rtde_i = setup(URIP)
+            print(f'Connection Estabalished current joint postition = {rtde_c.getActualJointPositionsHistory()}')
+            if input("Go to safe joint pos? y/n") == 'y':
+                rtde_c.moveJ(JointAngles['safe_start'])
+                print('moving to safe start angles')
+        except:
+            print('connecting failed')
+            if input('retry = y/n') == 'n':
+                s = False
 
-def pc_host(HOST, PORT):
+    print('end of program') #keep at the end
+
+def setup(HOST):
+    c = rtde_control.RTDEControlInterface(HOST)
+    r = rtde_receive.RTDEReceiveInterface(HOST)
+    i = rtde_io.RTDEIOInterface(HOST)
+
+    return c, r, i
+
+
+def pc_host(HOST, PORT): #old code making sockets
     _socket = Hostsocket(HOST, PORT)   #Builidng socket
 
     #
@@ -39,7 +59,7 @@ def pc_host(HOST, PORT):
         count = count + 1
         data = _socket.recv(1024)
         _socket.close()
-        print(f"Data from robot recieved...:{repr(data)}")
+        print(f"Data from robot recieved...:{repr(data)}")      ##
 
 
 
@@ -60,7 +80,7 @@ def UR_host(HOST, PORT):
                 count = count + 1
                 print("trying to send data..")
                 time.sleep(0.5)
-                command = "(200,50,45)"
+                command = "(0.2,0.05,45)"
                 c.send(command)
 
         except socket.error as socketerror:
@@ -71,4 +91,5 @@ def UR_host(HOST, PORT):
 
 
 if __name__ == '__main__':
+    print("starting script")
     main()

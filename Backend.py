@@ -16,3 +16,20 @@ def Clientsocket(ip, port):
     c, addr = s.accept()
     msg = c.recv(1024)
     return msg
+
+
+JointAngles = {  #dictionary with robot positions based on joint angles
+    'safe_start': [-90, -90, 90,  -90, -90, 0]
+
+}
+
+MoveParameters = {
+    'velocity' : 0.2,
+    'acceleration': 0.5,
+    'blend_0': 0.,
+    'blend_20': 0.02
+}
+
+TCPPoses = {
+
+}
