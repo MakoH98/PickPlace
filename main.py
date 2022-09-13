@@ -1,4 +1,4 @@
-from Backend import Hostsocket, JointAngles, userprompt
+from Backend import Hostsocket, JointAngles, userprompt, TCPPoses
 import time
 import rtde_control, rtde_io, rtde_receive
 
@@ -24,10 +24,18 @@ def main():
         # except:
         #     if not menu.connectFail():
         #         break
-    if c:
+    while c:
         pick = menu.main()
         if pick == 'FreeDrive':
             rtde_c.freedriveMode([1,1,1,1,1,1])
+            com = input('proceed y/log')
+            if com == 'y':
+
+                rtde_c.endFreedriveMode()
+            if com == 'log':
+                log = rtde_c.getActualToolFlangePose()
+                TCPPoses.update({input('name'):log})
+                time.sleep(2)
 
         elif pick == "SafeStart":
             print(f'moving robot...{JointAngles["safe_start"]}')
