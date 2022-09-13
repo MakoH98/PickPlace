@@ -12,7 +12,7 @@ def Hostsocket(ip, port):
 
 
 JointAngles = {  #dictionary with robot positions based on joint angles in degrees
-    'safe_start': [-90, -90, 90,  -90, -90, 0]
+    'safe_start': [-1.57, -1.57, 1.57,  -1.57, -1.57, 0]
 
 }
 
@@ -24,7 +24,7 @@ MoveParameters = {
 }
 
 TCPPoses = {  #dict containing poses mm degrees x, y , z , rx ,ry ,rz
-    'pose_test': [0, 400, 400, 180, 0, 0]
+    'pose_test': [0/1000, 400/1000, 400/1000, 3.14, 0, 0]
 
 
 }
@@ -33,7 +33,6 @@ class userprompt:
 
     def __init__(self):
         pass
-
 
     def main(self):
         try:
