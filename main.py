@@ -1,4 +1,4 @@
-from Backend import Hostsocket, JointAngles, userprompt, TCPPoses
+from Backend import Hostsocket, JointAngles, mainmenu, TCPPoses
 import time
 import rtde_control, rtde_io, rtde_receive
 
@@ -17,6 +17,7 @@ def main():
     while not c:
         # try:            #attempting to connect to robot
             rtde_c = rtde_control.RTDEControlInterface(URIP)
+            rtde_r = rtde_receive.RTDEReceiveInterface(URIP)
             time.sleep(1)
             # rtde_c, rtde_r, rtde_i = setup(URIP) #calling setup function for control recieve and IO conections
             print(f'Connection Estabalished current joint postition =') #test to see if actual joint position of robot on powerup is passed back might change to actual tcp
@@ -25,17 +26,18 @@ def main():
         #     if not menu.connectFail():
         #         break
     while c:
-        pick = menu.main()
+        pick = mainmenu()
         if pick == 'FreeDrive':
             rtde_c.freedriveMode([1,1,1,1,1,1])
             com = input('proceed y/log')
             if com == 'y':
 
                 rtde_c.endFreedriveMode()
+                print('rtde_r.getActualTCPPose()')
             if com == 'log':
-                log = rtde_c.getActualToolFlangePose()
+                log = rtde_r.getActualTCPPose()
                 TCPPoses.update({input('name'):log})
-                time.sleep(2)
+
 
         elif pick == "SafeStart":
             print(f'moving robot...{JointAngles["safe_start"]}')

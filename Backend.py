@@ -29,24 +29,10 @@ TCPPoses = {  #dict containing poses mm degrees x, y , z , rx ,ry ,rz
 
 }
 
-class userprompt:
 
-    def __init__(self):
-        pass
-
-    def main(self):
-        try:
-            key = int(input('1: Free drive mode? 2: Move to safe start angles 3: run program '))
-            if key == 1:
-                return 'FreeDrive'
-            if key == 2:
-                return 'SafeStart'
-        except:
-            print('use int val')
-
-    def freedrive(self):
-        input("stop: stops free drive or log: log the current pose")
-
-    def connectFail(self):
-        if input('connection failed retry y/n') == 'y':
-            return True
+def mainmenu():
+    key = int(input('1: Free drive mode? 2: Move to safe start angles 3: run program '))
+    if key == 1:
+         return 'FreeDrive'
+    if key == 2:
+         return 'SafeStart'
