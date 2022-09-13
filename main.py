@@ -6,9 +6,7 @@ URIP = "192.168.0.15"  # robot adress NB IP ADRESS FOR CLIENT NEEDS TO BE 192.16
 URPORT = 30002         #robot port for UR comms
 PCIP = "192.168.0.14" #pc adress
 PCPORT = 30000          #listing on port
-rtde_c= None
-rtde_i =None
-rtde_r = None
+
 
 def main():
     c = False
@@ -16,18 +14,24 @@ def main():
     rtde_i = None
     rtde_r = None
     menu = userprompt()
-    while not c :
-        try:            #attempting to connect to robot
-            rtde_c, rtde_r, rtde_i = setup(URIP) #calling setup function for control recieve and IO conections
-            print(f'Connection Estabalished current joint postition = {rtde_c.getActualJointPositionsHistory()}') #test to see if actual joint position of robot on powerup is passed back might change to actual tcp
+    while not c:
+        # try:            #attempting to connect to robot
+            rtde_c = rtde_control.RTDEControlInterface(URIP)
+            time.sleep(1)
+            # rtde_c, rtde_r, rtde_i = setup(URIP) #calling setup function for control recieve and IO conections
+            print(f'Connection Estabalished current joint postition =') #test to see if actual joint position of robot on powerup is passed back might change to actual tcp
             c = True
-        except:
-            if not menu.connectFail():
-                break
-    while c:
-        if menu.main() == 'FreeDrive':
+        # except:
+        #     if not menu.connectFail():
+        #         break
+    if c:
+        pick = menu.main()
+        if pick == 'FreeDrive':
             rtde_c.freedriveMode([1,1,1,1,1,1])
 
+        elif pick == "SafeStart":
+            print(f'moving robot...{JointAngles["safe_start"]}')
+            rtde_c.moveJ(JointAngles['safe_start'])
 
     print('end of program') #keep at the end
 
@@ -37,7 +41,7 @@ def setup(HOST): #setting up all the conections
     r = rtde_receive.RTDEReceiveInterface(HOST)
     i = rtde_io.RTDEIOInterface(HOST)
 
-    return c, r, i
+    return c
 
 
 
