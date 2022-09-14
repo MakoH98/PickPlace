@@ -24,15 +24,19 @@ MoveParameters = {
 }
 
 TCPPoses = {  #dict containing poses mm degrees x, y , z , rx ,ry ,rz
-    'pose_test': [0/1000, 400/1000, 400/1000, 3.14, 0, 0]
+    'pose_test': [0/1000, 400/1000, 600/1000, 3.14, 0, 0]
 
 
 }
 
 
 def mainmenu():
-    key = int(input('1: Free drive mode? 2: Move to safe start angles 3: run program '))
-    if key == 1:
-         return 'FreeDrive'
-    if key == 2:
-         return 'SafeStart'
+    print('[1] freedrive')
+    print('[2] safe start')
+    print('[3] move to waypoint')
+    print('[0] exit')
+
+def freemenu():
+    print('[0] exit')
+    print('[1] stop freedrive')
+    print('[2] log current pos')
