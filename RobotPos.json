@@ -1,6 +1,6 @@
 {
     "poses": {
-        "test1": {
+        "donotuse1": {
             "pose": [
                 0,
                 0,
@@ -10,7 +10,7 @@
                 0
             ]
         },
-        "test2": {
+        "donotuse2": {
             "pose": [
                 1,
                 1,

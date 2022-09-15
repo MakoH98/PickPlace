@@ -21,6 +21,8 @@ def main():
     rtde_i = None
     rtde_r = None
 
+    #loop for making connection to robot
+
     while not c:
         try:
             rtde_c = rtde_control.RTDEControlInterface(URIP)
@@ -36,9 +38,10 @@ def main():
 
             else:
                 pass
+    #main menu starts here
     mainmenu()
     option = int(input('enter option: '))
-
+    #loop for main menu
     while option !=0:
         if option == 1:
             freedrive(rtde_c,rtde_r)
@@ -59,57 +62,62 @@ def main():
 
     print('end of program') #keep at the end
 
-
-def setup(HOST): #setting up all the conections
+#settign up connections to the robot
+def setup(HOST):
     c = rtde_control.RTDEControlInterface(HOST)
     r = rtde_receive.RTDEReceiveInterface(HOST)
     i = rtde_io.RTDEIOInterface(HOST)
 
     return c
 
-
+#function to handle the program while robot is in free drive mode
 def freedrive(ControlObject, RecieveObject):
     rtde_c = ControlObject
     rtde_r = RecieveObject
 
-    rtde_c.freedriveMode([1, 1, 1, 1, 1, 1]) #set free drive on all axis
+    #setting free driveon all axis
+    rtde_c.freedriveMode([1, 1, 1, 1, 1, 1])
+    #calling option menu
     freemenu()
+    #recieving option
     com = int(input('enter option: '))
-
+    #looping trough menu until exit option is selected
     while com !=0:
         if com == 1:
+            #ending free drive
             rtde_c.endFreedriveMode()
 
 
         elif com == 2:
+            #adding robot posiotions to a nested dictionary
             print('getting positions')
             log = rtde_r.getActualTCPPose()
             time.sleep(1)
             print(log)
             global res
             res = add_entry(res, input('name'), log)
+            #asking to save current dictionary or add another point
             if input("save to file? y/n") == "y":
                 savejson(res, PosesFile)
                 print('saved')
 
         else:
             print('false input')
+        #asking for input again
         freemenu()
         com = int(input('enter option: '))
-
+    #making sure free drive exits when loop is broken
     print('exit free')
     rtde_c.endFreedriveMode()
 
-def add_entry(name, pose):
+#function add robot pose data to ditionary
+def add_entry(res, name, pose):
     cat = 'poses' #pass it trough function later to use json file for angles aswell
     res[cat][name] = {'pose':pose}
 
-
-
-
     return res
 
-
+#function to save dictioary to json file
 def savejson(list, filename):
 
     with open(filename, 'r+') as file:
@@ -119,7 +127,7 @@ def savejson(list, filename):
         json.dump(file_data, file, indent=4)
         file.close()
 
-
+#function to move robot to waypoints in json file
 def movetopoint(ControlObject):
     rtde_c = ControlObject
     # aquire options
@@ -137,10 +145,7 @@ def movetopoint(ControlObject):
     print("moving...")
     json1_file.close()
 
-
-
-
-
+#covention
 if __name__ == '__main__':
     print("starting script")
     main()
