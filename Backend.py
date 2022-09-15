@@ -23,11 +23,7 @@ MoveParameters = {
     'blend_20': 0.02
 }
 
-TCPPoses = {  #dict containing poses mm degrees x, y , z , rx ,ry ,rz
-    'pose_test': [0/1000, 400/1000, 600/1000, 3.14, 0, 0]
 
-
-}
 
 
 def mainmenu():
