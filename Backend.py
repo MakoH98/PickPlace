@@ -40,3 +40,7 @@ def freemenu():
     print('[0] exit')
     print('[1] stop freedrive')
     print('[2] log current pos')
+
+def waypointmenu():
+    print('0 exit')
+    print('[name] enter name of waypoint')

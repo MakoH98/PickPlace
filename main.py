@@ -1,6 +1,6 @@
 
 
-from Backend import Hostsocket, JointAngles, mainmenu, TCPPoses, freemenu
+from Backend import Hostsocket, JointAngles, mainmenu, TCPPoses, freemenu, waypointmenu
 import time
 import rtde_control, rtde_io, rtde_receive
 import json
@@ -9,7 +9,7 @@ URIP = "192.168.0.15"  # robot adress NB IP ADRESS FOR CLIENT NEEDS TO BE 192.16
 URPORT = 30002         #robot port for UR comms
 PCIP = "192.168.0.14" #pc adress
 PCPORT = 30000          #listing on port
-res = []
+res = {}
 seen = set()
 PosesFile = 'RobotPos.json'
 Poses = dict
@@ -48,7 +48,7 @@ def main():
             rtde_c.moveJ(JointAngles['safe_start'],0.5,0.2)
         elif option ==3:
 
-            movetopoint(rtde_c, [0,1,2,3])
+            movetopoint(rtde_c)
 
 
 
@@ -100,10 +100,12 @@ def freedrive(ControlObject, RecieveObject):
     print('exit free')
     rtde_c.endFreedriveMode()
 
-def add_entry(res, name, pose):
+def add_entry(name, pose):
+    cat = 'poses' #pass it trough function later to use json file for angles aswell
+    res[cat][name] = {'pose':pose}
 
 
-    res.append({'name': name, 'pose': pose})
+
 
     return res
 
@@ -115,22 +117,25 @@ def savejson(list, filename):
         file_data["poses_robot"].append(list)
         file.seek(0)
         json.dump(file_data, file, indent=4)
+        file.close()
 
 
-def movetopoint(ControlObject, way):
+def movetopoint(ControlObject):
     rtde_c = ControlObject
     # aquire options
     json1_file = open('RobotPos.json')
     json1_str = json1_file.read()
     json1_data = json.loads(json1_str)
 
-    json1_data = json1_data['poses_robot']
+    json1_data = json1_data['poses']
     print(json1_data)
-    waypoints = way
-    for i in waypoints:
-        move = json1_data[i]['pose']
-        rtde_c.moveJ_IK(move,0.5,0.2)
-        print("moving...")
+
+    option = str(input('enter name'))
+
+    move = json1_data[option]['pose']
+    rtde_c.moveJ_IK(move,0.5,0.2)
+    print("moving...")
+    json1_file.close()
 
 
 
